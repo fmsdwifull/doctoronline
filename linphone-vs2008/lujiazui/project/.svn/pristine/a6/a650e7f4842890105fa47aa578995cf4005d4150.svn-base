@@ -1,0 +1,174 @@
+/********************************************************************************
+** Form generated from reading UI file 'lujiazui.ui'
+**
+** Created: Fri May 8 09:24:42 2015
+**      by: Qt User Interface Compiler version 4.7.0
+**
+** WARNING! All changes made in this file will be lost when recompiling UI file!
+********************************************************************************/
+
+#ifndef UI_LUJIAZUI_H
+#define UI_LUJIAZUI_H
+
+#include <QtCore/QVariant>
+#include <QtGui/QAction>
+#include <QtGui/QApplication>
+#include <QtGui/QButtonGroup>
+#include <QtGui/QDialog>
+#include <QtGui/QHBoxLayout>
+#include <QtGui/QHeaderView>
+#include <QtGui/QLabel>
+#include <QtGui/QLineEdit>
+#include <QtGui/QPushButton>
+#include <QtGui/QSpacerItem>
+#include <QtGui/QTableView>
+#include <QtGui/QVBoxLayout>
+
+QT_BEGIN_NAMESPACE
+
+class Ui_lujiazuiClass
+{
+public:
+    QVBoxLayout *verticalLayout;
+    QHBoxLayout *horizontalLayout;
+    QLabel *label;
+    QLabel *callStateLabel;
+    QPushButton *listUpdateBtn;
+    QTableView *tableView;
+    QHBoxLayout *horizontalLayout_2;
+    QLabel *label_2;
+    QLineEdit *lineEditTest;
+    QPushButton *sipcallBtn;
+    QPushButton *siphungupBtn;
+    QSpacerItem *horizontalSpacer;
+    QLabel *h_id_label;
+    QPushButton *serviceCsBtn;
+
+    void setupUi(QDialog *lujiazuiClass)
+    {
+        if (lujiazuiClass->objectName().isEmpty())
+            lujiazuiClass->setObjectName(QString::fromUtf8("lujiazuiClass"));
+        lujiazuiClass->resize(964, 632);
+        verticalLayout = new QVBoxLayout(lujiazuiClass);
+        verticalLayout->setSpacing(6);
+        verticalLayout->setContentsMargins(11, 11, 11, 11);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        label = new QLabel(lujiazuiClass);
+        label->setObjectName(QString::fromUtf8("label"));
+        QFont font;
+        font.setFamily(QString::fromUtf8("\345\256\213\344\275\223"));
+        font.setPointSize(12);
+        font.setBold(true);
+        font.setWeight(75);
+        label->setFont(font);
+
+        horizontalLayout->addWidget(label);
+
+        callStateLabel = new QLabel(lujiazuiClass);
+        callStateLabel->setObjectName(QString::fromUtf8("callStateLabel"));
+
+        horizontalLayout->addWidget(callStateLabel);
+
+        listUpdateBtn = new QPushButton(lujiazuiClass);
+        listUpdateBtn->setObjectName(QString::fromUtf8("listUpdateBtn"));
+        listUpdateBtn->setMinimumSize(QSize(200, 30));
+        listUpdateBtn->setMaximumSize(QSize(200, 30));
+
+        horizontalLayout->addWidget(listUpdateBtn);
+
+
+        verticalLayout->addLayout(horizontalLayout);
+
+        tableView = new QTableView(lujiazuiClass);
+        tableView->setObjectName(QString::fromUtf8("tableView"));
+
+        verticalLayout->addWidget(tableView);
+
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        label_2 = new QLabel(lujiazuiClass);
+        label_2->setObjectName(QString::fromUtf8("label_2"));
+
+        horizontalLayout_2->addWidget(label_2);
+
+        lineEditTest = new QLineEdit(lujiazuiClass);
+        lineEditTest->setObjectName(QString::fromUtf8("lineEditTest"));
+        lineEditTest->setEnabled(true);
+        lineEditTest->setMaximumSize(QSize(200, 30));
+
+        horizontalLayout_2->addWidget(lineEditTest);
+
+        sipcallBtn = new QPushButton(lujiazuiClass);
+        sipcallBtn->setObjectName(QString::fromUtf8("sipcallBtn"));
+        sipcallBtn->setMinimumSize(QSize(150, 30));
+        sipcallBtn->setMaximumSize(QSize(150, 30));
+        sipcallBtn->setAutoFillBackground(false);
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/lujiazui/image/calling_1.jpg"), QSize(), QIcon::Normal, QIcon::Off);
+        sipcallBtn->setIcon(icon);
+
+        horizontalLayout_2->addWidget(sipcallBtn);
+
+        siphungupBtn = new QPushButton(lujiazuiClass);
+        siphungupBtn->setObjectName(QString::fromUtf8("siphungupBtn"));
+        siphungupBtn->setMinimumSize(QSize(150, 30));
+        siphungupBtn->setMaximumSize(QSize(150, 30));
+        QIcon icon1;
+        icon1.addFile(QString::fromUtf8(":/lujiazui/image/calling_2.jpg"), QSize(), QIcon::Normal, QIcon::Off);
+        siphungupBtn->setIcon(icon1);
+        siphungupBtn->setIconSize(QSize(16, 16));
+
+        horizontalLayout_2->addWidget(siphungupBtn);
+
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer);
+
+        h_id_label = new QLabel(lujiazuiClass);
+        h_id_label->setObjectName(QString::fromUtf8("h_id_label"));
+        h_id_label->setEnabled(true);
+
+        horizontalLayout_2->addWidget(h_id_label);
+
+        serviceCsBtn = new QPushButton(lujiazuiClass);
+        serviceCsBtn->setObjectName(QString::fromUtf8("serviceCsBtn"));
+        serviceCsBtn->setMinimumSize(QSize(200, 30));
+        serviceCsBtn->setMaximumSize(QSize(200, 30));
+
+        horizontalLayout_2->addWidget(serviceCsBtn);
+
+
+        verticalLayout->addLayout(horizontalLayout_2);
+
+
+        retranslateUi(lujiazuiClass);
+
+        QMetaObject::connectSlotsByName(lujiazuiClass);
+    } // setupUi
+
+    void retranslateUi(QDialog *lujiazuiClass)
+    {
+        lujiazuiClass->setWindowTitle(QApplication::translate("lujiazuiClass", "\345\214\273\347\224\237\351\242\204\347\272\246\345\271\263\345\217\260", 0, QApplication::UnicodeUTF8));
+        label->setText(QApplication::translate("lujiazuiClass", "\345\214\273\347\224\237\351\242\204\347\272\246\345\210\227\350\241\250", 0, QApplication::UnicodeUTF8));
+        callStateLabel->setText(QString());
+        listUpdateBtn->setText(QApplication::translate("lujiazuiClass", "\345\210\227 \350\241\250 \345\210\267 \346\226\260", 0, QApplication::UnicodeUTF8));
+        label_2->setText(QApplication::translate("lujiazuiClass", "\346\234\215\345\212\241\347\224\265\350\257\235", 0, QApplication::UnicodeUTF8));
+        sipcallBtn->setText(QApplication::translate("lujiazuiClass", "\345\221\274\345\217\253", 0, QApplication::UnicodeUTF8));
+        siphungupBtn->setText(QApplication::translate("lujiazuiClass", "\346\214\202\346\226\255", 0, QApplication::UnicodeUTF8));
+        h_id_label->setText(QString());
+        serviceCsBtn->setText(QApplication::translate("lujiazuiClass", "\346\255\244\346\254\241\346\234\215\345\212\241\347\273\223\346\235\237", 0, QApplication::UnicodeUTF8));
+    } // retranslateUi
+
+};
+
+namespace Ui {
+    class lujiazuiClass: public Ui_lujiazuiClass {};
+} // namespace Ui
+
+QT_END_NAMESPACE
+
+#endif // UI_LUJIAZUI_H

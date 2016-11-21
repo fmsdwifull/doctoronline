@@ -1,0 +1,47 @@
+#include "lujiazui.h"
+#include <QtGui/QApplication>
+
+
+#include <QTextCodec>
+#include <QDebug>
+#include <QByteArray>
+
+#include <common.h>
+#include <logindlg.h>
+
+SipInfo  usrAuth; //用户信息
+
+
+int main(int argc, char *argv[])
+{
+	QApplication a(argc, argv);
+
+	Qt::WindowFlags flags = 0;
+	flags |= Qt::WindowMinimizeButtonHint;
+	flags |= Qt::WindowCloseButtonHint;
+	flags |= Qt::MSWindowsFixedSizeDialogHint;
+
+	QTextCodec::setCodecForTr(QTextCodec::codecForName(QTextCodec::codecForLocale()->name()));
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName(QTextCodec::codecForLocale()->name())); 
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName(QTextCodec::codecForLocale()->name()));
+
+	ReadUserConfig();
+	
+	//loginDlg w;
+    //w.show();
+	//lujiazui w;
+	//w.show();
+	loginDlg login;
+	if(login.exec()==QDialog::Accepted)
+    {
+
+
+		//lujiazui w(NULL, flags);
+		lujiazui w;
+		w.show();
+		RegisterSip();
+        return a.exec();
+    }
+    else return 0;
+	return a.exec();
+}

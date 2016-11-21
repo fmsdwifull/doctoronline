@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>lujiazuiClass</class>
+ <widget class="QDialog" name="lujiazuiClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>964</width>
+    <height>717</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>医生预约平台</string>
+  </property>
+  <widget class="QLabel" name="callStateLabel">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>20</y>
+     <width>331</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="sipcallBtn">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>680</y>
+     <width>121</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>呼叫</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEditTest">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>680</y>
+     <width>141</width>
+     <height>28</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QTableView" name="tableView">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>50</y>
+     <width>951</width>
+     <height>621</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>121</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>宋体</family>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>医生预约列表</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="siphungupBtn">
+   <property name="geometry">
+    <rect>
+     <x>350</x>
+     <y>680</y>
+     <width>121</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>挂断</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="listUpdateBtn">
+   <property name="geometry">
+    <rect>
+     <x>830</x>
+     <y>12</y>
+     <width>131</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>列 表 刷 新</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="serviceCsBtn">
+   <property name="geometry">
+    <rect>
+     <x>830</x>
+     <y>680</y>
+     <width>131</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>此次服务结束</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>680</y>
+     <width>51</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>服务电话</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="h_id_label">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>680</x>
+     <y>686</y>
+     <width>141</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="lujiazui.qrc"/>
+ </resources>
+ <connections/>
+</ui>

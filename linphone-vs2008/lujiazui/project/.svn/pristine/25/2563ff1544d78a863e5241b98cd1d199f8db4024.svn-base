@@ -1,0 +1,62 @@
+#ifndef _COMMON_H
+#define _COMMON_H
+
+#include <QSettings>
+#include <QDir>
+#include <QTimer>
+
+#include <QtNetwork>
+#include <QNetworkReply>
+#include <QNetworkAccessManager>
+#include <QStandardItemModel>
+
+#include <QMap>
+
+#include <QMessageBox>
+#include <QDebug>
+
+#include< iostream>
+
+#include "linphonecore.h"
+#include "private.h"
+
+
+#include <fstream>
+#include "json/json.h"
+
+
+
+using namespace std;
+
+//sip服务器注册信息
+typedef struct SipInfo{
+	char usrname[64];
+	char password[64];
+	char sipip[64];
+	char serverip[64];
+}SipInfo;
+
+//用户登录信息
+typedef struct LoginInfo{
+	char username[64];
+	char secret[64];
+}LoginInfo;
+
+
+
+//医生列表结构
+typedef struct DoctoryInfo{
+	char id[32];
+	char service[128];
+	char siptel[32];
+	char yuyuedate[128];
+	char yuyuetime[64];
+	char senddt[64];
+}DoctoryInfo;
+
+
+bool ReadUserConfig();
+bool RegisterSip();
+
+
+#endif

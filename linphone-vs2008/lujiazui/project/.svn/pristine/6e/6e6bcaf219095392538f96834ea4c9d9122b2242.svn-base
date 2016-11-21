@@ -1,0 +1,59 @@
+[video]
+enabled=1
+size=cif
+display=1
+capture=1
+show_local=0
+self_view=1
+device=Directshow capture: USB2.0 Camera
+
+[call_log_0]
+dir=0
+status=0
+from=<sip:8005@101.231.214.34:33233>
+caller=8005
+called=005
+to=<sip:005@101.231.214.34:33233>
+start_date=2015-03-19 12:48:14
+duration=28
+
+[call_log_1]
+dir=0
+status=0
+from=<sip:8005@101.231.214.34:33233>
+caller=8005
+called=001
+to=<sip:001@101.231.214.34:33233>
+start_date=2015-03-19 12:37:44
+duration=9
+
+[call_log_2]
+dir=0
+status=0
+from=<sip:8005@101.231.214.34:33233>
+caller=8005
+called=005
+to=<sip:005@101.231.214.34:33233>
+start_date=2015-03-19 12:37:15
+duration=12
+
+[call_log_3]
+dir=0
+status=0
+from=<sip:8005@101.231.214.34:33233>
+caller=8005
+called=005
+to=<sip:005@101.231.214.34:33233>
+start_date=2015-03-19 12:33:24
+duration=37
+
+[call_log_4]
+dir=0
+status=0
+from=<sip:8005@101.231.214.34:33233>
+caller=8005
+called=005
+to=<sip:005@101.231.214.34:33233>
+start_date=2015-03-19 12:27:03
+duration=11
+

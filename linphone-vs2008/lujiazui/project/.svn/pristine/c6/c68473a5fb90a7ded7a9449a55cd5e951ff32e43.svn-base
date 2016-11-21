@@ -1,0 +1,12 @@
+[sipuser]
+usr=005
+pwd=0000
+sipIP=192.168.0.100
+serverIP=http://222.73.215.182:88
+[settings]
+sendinfotime=10
+autocalltime=15
+updatelisttime=1
+
+
+

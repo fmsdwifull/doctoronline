@@ -1,0 +1,668 @@
+#include "lujiazui.h"
+
+
+
+#define PHONE_CORE_TIMER 100
+
+static LinphoneCoreVTable vTable;
+static const char *config_file = "siplog.ini";
+static const char *factoryConfig = "siplog.ini";
+LinphoneCore *the_core=NULL;
+
+extern SipInfo  usrAuth; //用户信息
+extern LoginInfo  lginfo; //用户信息
+
+//用与来电号码搜索
+QMap<QString,DoctoryInfo>  map_docinfo_sip;
+
+static void linphone_log_handler(OrtpLogLevel lev, const char *fmt, va_list args)
+{
+	const char *lname="undef";
+	char *msg;
+	char *msg_str;
+
+	switch(lev)
+	{
+			case ORTP_DEBUG:
+				lname="DEBUG";
+				break;
+			case ORTP_MESSAGE:
+				lname="MESSAGE";
+				break;
+			case ORTP_WARNING:
+				lname="WARING";
+				break;
+			case ORTP_ERROR:
+				lname="ERROR";
+				break;
+			case ORTP_FATAL:
+				lname="FATAL";
+				break;
+			default:
+				lname = ("Bad level !");
+	}
+	msg=ortp_strdup_vprintf(fmt,args);
+	msg_str = ortp_strdup_printf("%s: %s\r\n",lname,msg);
+#ifdef _MSC_VER
+//	OutputDebugString(msg_str);
+#endif
+	ms_free(msg);
+	ms_free(msg_str);
+}
+//来电，则弹出来电对话框
+static void showInterfaceCb(LinphoneCore *lc)
+{
+
+}
+
+static  void inviteReceivedCb(LinphoneCore *lc, const char *from) 
+{
+	
+	//lujiazui *the_ui = (lujiazui *)linphone_core_get_user_data(lc);
+	//if(the_ui)
+	//	the_ui->ui.callStateLabel->setText(from); 
+
+
+
+	#if 0
+	QMessageBox::StandardButton rb = QMessageBox::question(NULL, "提示", "有人呼叫您，是否接听？", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+	if(rb == QMessageBox::Yes)
+	{
+			linphone_core_accept_call(the_core,NULL);
+	}else{
+		linphone_core_terminate_call(the_core,NULL);
+	}
+	#endif
+/*
+	the_ui->ui.sipcallBtn->setText("接听 ");
+	callBtnFlag=CALLING_STATE;
+
+	QString msg(from);
+
+	for(int i=0; i<msg.length(); i++)
+	{
+			  if(msg.at(i) == '"')
+			  {
+				  int j=0;
+				  while(msg.at(++j)!='"')
+				  {
+					  
+					  the_ui->sipTel += msg.at(j);
+				  }
+			  }
+			  break;
+			}
+	*/
+}
+
+static void byeReceivedCb(LinphoneCore *lc, const char *from) 
+{
+
+}
+
+static void displayStatusCb(LinphoneCore *lc, const char *message) 
+{
+
+	lujiazui *the_ui=(lujiazui*)linphone_core_get_user_data(lc);
+
+	the_ui->ui.callStateLabel->setText(message);
+	
+	QString msg(message);
+	//QMessageBox::warning(the_ui,"--------",msg);
+	bool ret1=msg.contains("Call terminated");
+	bool ret2=msg.contains("Call ended");
+	if(ret1||ret2)
+	{
+		QMessageBox::warning(the_ui,"温馨提示！","如果服务器完成，请点击服务结束按钮！");
+		the_ui->ui.serviceCsBtn->setEnabled(true);
+	}
+
+	
+
+
+	//bool contains
+
+/*
+	QMessageBox::StandardButton rb = QMessageBox::question(NULL, tr("温馨提示"), tr("您正在呼叫")+tr(m_address)+tr(",请确认！"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+	if(rb == QMessageBox::Yes)
+	{
+		LinphoneProxyConfig* proxyCfg=NULL;	
+		//get default proxy
+		linphone_core_get_default_proxy(the_core,&proxyCfg);
+
+		if(proxyCfg!=NULL)
+		{
+			linphone_core_invite(the_core,m_address) ;
+		}
+	}
+*/
+
+
+
+#if 0
+	CcoffeeroomDlg *the_ui = (CcoffeeroomDlg*)linphone_core_get_user_data(lc);
+	CString msg(message);
+	//AfxMessageBox(msg);
+	if(msg.Find(_T("successful"))>=0)
+	{
+		CString usrsipTmp(usrAuth.usrname);
+		the_ui->m_editInfo.SetWindowText(_T("注册成功，您的号码为：")+usrsipTmp);
+	}
+		//获取对方号码
+	if(msg.Find(_T("@"))>=0)
+	{	
+			//fromNum.Empty();
+			//获取对方电话号码，获取方式是获取双引号内的内容，其就是电话号码
+			for(int i=0; i<msg.GetLength(); i++)
+			{
+			  if(msg.GetAt(i) == '"')
+			  {
+				  int j=0;
+				  while(msg.GetAt(++j)!='"')
+				  {
+					  fromNum += msg.GetAt(j);
+				  }
+			  }
+			  break;
+			}
+
+			//电话号码先清O
+			if(msg.Find("is contacting you")>=0)
+			{
+				toNum.Empty();
+				fromNum.Empty();
+
+				for(int i=0; i<msg.GetLength(); i++)
+				{
+					if(msg.GetAt(i) == ':')
+					  {
+						  while(msg.GetAt(++i)!='@')
+						  {
+							  fromNum += msg.GetAt(i);
+						  }
+						  break;
+					  }
+					  
+					}
+
+			}
+
+			
+			//查询桌号
+			GUEST_t pLook;
+			if(m_GuestMapNum.Lookup(fromNum,pLook))
+			{
+				the_ui->m_editInfo.SetWindowText( pLook.guestNum+ _T(" 号座位正在呼叫") );
+			}
+		}
+
+		//无法接通
+		if(msg.Find(_T("User is busy"))>=0)
+		{
+			the_ui->m_editInfo.SetWindowText( _T("对方电话已关机，请稍后再拨！"));	
+		}
+
+		//无人接听
+		if(msg.Find(_T("Call declined"))>=0)
+		{
+			the_ui->m_editInfo.SetWindowText( _T("对方不在，电话无人接听！"));	
+		}
+
+		//通话结束
+		if((msg.Find(_T("Call terminated"))>=0)||(msg.Find(_T("Call ended"))>=0))
+		{
+			the_ui->m_editInfo.SetWindowText( _T("通话结束！"));
+			::SendMessage(m_mainWnd,WM_MYMESSAGE,0,(LPARAM)"callover");
+		}
+
+		//正在呼叫
+		if(msg.Find(_T("Remote ringing"))>=0)
+		{
+			the_ui->m_editInfo.SetWindowText( _T("正在呼叫")+toNum+_T(" 请稍候"));	
+		}
+
+		//正在通话
+		if(msg.Find(_T("Connected"))>=0)
+		{
+			if(toNum.GetLength()!=0)
+			{
+				//查询桌号
+				UINT XXX=toNum.GetLength();
+				GUEST_t pLook;
+				if(m_GuestMapNum.Lookup(toNum,pLook))
+				{
+					the_ui->m_editInfo.SetWindowText( pLook.guestNum+ _T(" 号座位正在通话") );
+					::SendMessage(m_mainWnd,WM_MYMESSAGE,0,(LPARAM)"talking");
+				}
+			}else{
+				//查询桌号
+				//AfxMessageBox(fromNum);
+				GUEST_t pLook;
+				if(m_GuestMapNum.Lookup(fromNum,pLook))
+				{
+					the_ui->m_editInfo.SetWindowText( pLook.guestNum+ _T(" 号座位正在通话") );
+					::SendMessage(m_mainWnd,WM_MYMESSAGE,0,(LPARAM)"talking");
+				}
+			}
+		}
+
+		//呼叫失败
+		if(msg.Find(_T("Call failed"))>=0)
+		{
+			the_ui->m_editInfo.SetWindowText( _T("呼叫失败！"));
+
+		}
+#endif
+}
+
+static void displayMessageCb(LinphoneCore *lc, const char *message) 
+{
+	//QMessageBox::about(this,"Slot test","Ok2");
+	//printf("XXXXXXX2");
+	QString path = QDir::currentPath();
+	//qDebug() << "currentPath:" << path; 
+}
+static void authInfoRequested(LinphoneCore *lc, const char *realm, const char *username) 
+{
+}
+static void generalStateChange(LinphoneCore *lc, LinphoneGeneralState *gstate) 
+{
+}
+
+static void network_quality(LinphoneCore *lc, int ms)
+{
+}
+
+static void media_quality(LinphoneCore *lc, int jitter, float packet_lost)
+{
+}
+
+
+
+lujiazui::lujiazui(QWidget *parent, Qt::WFlags flags)
+	: QDialog(parent, flags)
+{
+	ui.setupUi(this);
+
+		//初始化linphonelib
+	linphone_core_enable_logs_with_cb(linphone_log_handler);
+
+	memset(&vTable,0,sizeof(vTable));
+	vTable.show = showInterfaceCb;
+	vTable.inv_recv = inviteReceivedCb;
+	vTable.auth_info_requested = authInfoRequested;
+	vTable.display_status = displayStatusCb;
+	vTable.display_message = displayMessageCb;
+	vTable.display_warning = displayMessageCb;
+	vTable.general_state = generalStateChange;
+	vTable.network_quality_monitor = network_quality;
+	vTable.media_quality_monitor = media_quality;
+
+	the_core = linphone_core_new(	&vTable
+		,config_file
+		,factoryConfig
+		,this);
+
+
+
+
+
+	linphone_core_set_playback_gain_db(the_core,1.0);
+
+	QTimer *timer = new QTimer();
+	
+	//新建定时器
+	connect(timer,SIGNAL(timeout()),this,SLOT(linponeIterate()));
+	timer->start(30); 
+
+	//下载json列表
+	managerDoctory = new QNetworkAccessManager(this);
+    connect(managerDoctory, SIGNAL(finished(QNetworkReply*)),this, SLOT(replyDocFinished(QNetworkReply*)));
+
+	//修改服务状态
+	checkState = new QNetworkAccessManager(this);
+    connect(checkState, SIGNAL(finished(QNetworkReply*)),this, SLOT(replyCSFinished(QNetworkReply*)));
+
+	
+	QString ipStr(usrAuth.serverip);
+	QString tmpStr1(tr("/OAapp/WebObjects/OAapp.woa?cjApply=doctor_yuyue"));
+	//QString tmpStr2(tr(lginfo.username));
+	//QString tmpStr3(tr("/80046/tid/2"));
+
+	qDebug()<<ipStr+tmpStr1;
+
+	//QString tmpStr1(tr("interface/do_recordMelist/90000/80046"));
+    managerDoctory->get(QNetworkRequest(QUrl(ipStr+tmpStr1)));
+	//managerDoctory->get(QNetworkRequest(QUrl(ipStr)));
+
+	//医生列表初始化
+	initModel=new QStandardItemModel(100, 6, this);
+
+
+	ui.tableView->setEditTriggers ( QAbstractItemView::NoEditTriggers );
+	ui.tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+	
+		
+	ui.tableView->setModel(initModel);
+	for(int i=0;i<6;i++)
+		ui.tableView->setColumnWidth(i,150);
+
+	initModel->setHeaderData(0, Qt::Horizontal, tr("服务编号"));
+	initModel->setHeaderData(1, Qt::Horizontal, tr("服务类型"));
+	initModel->setHeaderData(2, Qt::Horizontal, tr("联系电话"));
+	initModel->setHeaderData(3, Qt::Horizontal, tr("预约日期"));
+
+    initModel->setHeaderData(4, Qt::Horizontal, tr("预约时间"));
+
+	initModel->setHeaderData(5, Qt::Horizontal, tr("发送时间"));
+
+	//获取json数据
+	loadDocJson();
+
+	//初始化医生列表
+	initDocTable();
+
+
+
+	// 获取视图的项目选择模型
+    QItemSelectionModel *selectionModel = ui.tableView->selectionModel();
+    connect(selectionModel, SIGNAL(currentChanged(QModelIndex,QModelIndex)),this, SLOT(changeCurrent(QModelIndex,QModelIndex)));
+
+	ui.serviceCsBtn->setEnabled(false);
+}
+
+lujiazui::~lujiazui()
+{
+
+}
+
+
+void lujiazui::linponeIterate()
+{
+	   if (the_core != NULL)
+	   {
+			linphone_core_iterate(the_core);
+	   }
+}
+
+void lujiazui::on_sipcallBtn_clicked()
+{
+		char m_address[64];
+		QString tmpStr=ui.lineEditTest->text();
+
+		sprintf(m_address,"sip:%s@%s",tmpStr.toStdString().c_str(),usrAuth.sipip);
+		//QMessageBox::warning(this,tr("温馨提示！"),tr("您正在呼叫")+tr(m_address)+tr(",请确认！"));
+
+		QMessageBox::StandardButton rb = QMessageBox::question(NULL, tr("温馨提示"), tr("您正在呼叫")+tr(m_address)+tr(",请确认！"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+	    if(rb == QMessageBox::Yes)
+		{
+				LinphoneProxyConfig* proxyCfg=NULL;	
+				//get default proxy
+				linphone_core_get_default_proxy(the_core,&proxyCfg);
+
+				if(proxyCfg!=NULL)
+				{
+					linphone_core_invite(the_core,m_address) ;
+				}
+		}
+
+
+}
+
+void lujiazui::on_siphungupBtn_clicked()
+{
+	    linphone_core_terminate_call(the_core,NULL);
+}
+
+
+void lujiazui::on_listUpdateBtn_clicked()
+{
+	QString ipStr(usrAuth.serverip);
+	QString tmpStr1(tr("/OAapp/WebObjects/OAapp.woa?cjApply=doctor_yuyue"));
+	//QString tmpStr2(tr(lginfo.username));
+	//QString tmpStr3(tr("/80046/tid/2"));
+
+	qDebug()<<ipStr+tmpStr1;
+	//QString tmpStr1(tr("interface/do_recordMelist/90000/80046"));
+    managerDoctory->get(QNetworkRequest(QUrl(ipStr+tmpStr1)));
+}
+
+//服务器状态修改按钮
+//http://222.73.197.174:88/OAapp/WebObjects/OAapp.woa?cjApply=doctor_status&handle=over&id=&checkstr=
+void lujiazui::on_serviceCsBtn_clicked()
+{
+	QString ipStr(usrAuth.serverip);
+	QString serviceID=ui.h_id_label->text();
+
+	//获取当前日期用于产生密钥
+	QString todayStr;
+	QDateTime time = QDateTime::currentDateTime();//获取系统现在的时间
+	todayStr = time.toString("yyyy-MM-dd"); //设置显示格式
+	QString md5Str=getMd5Check(todayStr+serviceID);
+
+	QString tmpStr1(tr("/OAapp/WebObjects/OAapp.woa?cjApply=doctor_status&handle=over&id="));
+	QString pathStr1=tr("&checkstr=");
+
+	//QString tmpStr2(tr(lginfo.username));
+	//QString tmpStr3(tr("/80046/tid/2"));
+
+	qDebug()<<ipStr+tmpStr1+serviceID+pathStr1+md5Str;
+	//QString tmpStr1(tr("interface/do_recordMelist/90000/80046"));
+    checkState->get(QNetworkRequest(QUrl(ipStr+tmpStr1+serviceID+pathStr1+md5Str)));
+
+	ui.serviceCsBtn->setEnabled(false);
+}
+
+
+//修改服务状态
+void lujiazui::replyCSFinished(QNetworkReply *reply)
+{
+	 QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+     QString all = codec->toUnicode(reply->readAll());
+	 QMessageBox::warning(this,"温馨提示！",all);
+}
+
+
+//byliu
+void lujiazui::replyDocFinished(QNetworkReply *reply)
+{
+    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+    QString all = codec->toUnicode(reply->readAll());
+
+    QFile file("doctoryljz.json");  
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text))  
+    {  
+        qDebug()<< "Open failed......" ;  
+        return;  
+    }  
+      
+    QTextStream txtOutput(&file);  
+    txtOutput << all << endl;  
+    file.close(); 
+
+#if 0
+	//这里应该会有点问题，下载xml和加载显示不会同步，待有时间再处理
+	updateHistory();
+
+	//加载xml
+	historyXML();
+
+	//遍历map显示订单现象
+	iterHistoryMap();
+#endif
+
+	loadDocJson();
+	//初始化医生列表
+	initDocTable();
+}
+
+
+void lujiazui::loadDocJson()
+{
+	// 解析json用Json::Reader  
+    Json::Reader reader;    
+	std::ifstream file;  
+	file.open ("doctoryljz.json");
+
+    Json::Value root;
+    Json::Value item;
+    reader.parse(file,root);
+
+	
+	//清空结构体中下次留下的数据
+	map_docinfo.clear();
+
+#if 1
+	int size = root.size();
+
+	DoctoryInfo dcinfo;
+
+
+	for (int i=0; i<size; ++i)
+    {
+
+
+		QString service=QString::fromStdString(root[i]["service"].asString());
+		strcpy(dcinfo.service,service.toStdString().c_str());
+
+		//QString userid=QString::fromStdString(root["message"]["yuyue"][i]["userid"].asString());
+		//strcpy(dcinfo.userid,userid.toStdString().c_str());
+
+		QString siptel=QString::fromStdString(root[i]["SIP"].asString());
+		strcpy(dcinfo.siptel,siptel.toStdString().c_str());
+
+		QString yuyuedate=QString::fromStdString(root[i]["yuyuedate"].asString());
+		strcpy(dcinfo.yuyuedate,yuyuedate.toStdString().c_str());
+
+
+		QString yuyuetime=QString::fromStdString(root[i]["yuyuetime"].asString());
+		strcpy(dcinfo.yuyuetime,yuyuetime.toStdString().c_str());
+
+		QString id=QString::fromStdString(root[i]["id"].asString());
+		strcpy(dcinfo.id,id.toStdString().c_str());
+
+
+		QString senddt=QString::fromStdString(root[i]["senddt"].asString());
+		strcpy(dcinfo.senddt,senddt.toStdString().c_str());
+
+		map_docinfo.insert(dcinfo.id,dcinfo);
+
+		map_docinfo_sip.insert(dcinfo.siptel,dcinfo);//用来搜索电话
+
+		//qDebug()<<dcinfo.userid<<"xxxxxxxx";
+    }
+
+	#endif
+
+
+}
+
+void lujiazui::initDocTable()
+{
+		QMap<QString,DoctoryInfo>::const_iterator go_iter;
+		
+		int rowNum=initModel->rowCount();
+		initModel->removeRows(0,rowNum);
+		initModel->insertRows(0,rowNum);
+	   
+
+
+		int i=0;
+		for( go_iter=map_docinfo.constBegin(); go_iter!=map_docinfo.constEnd(); go_iter++,i++)
+		{
+			initModel->setData(initModel->index(i,0),go_iter.value().id);	
+			initModel->setData(initModel->index(i,1),go_iter.value().service);		
+			initModel->setData(initModel->index(i,2),go_iter.value().siptel);
+			initModel->setData(initModel->index(i,3),go_iter.value().yuyuedate);
+			initModel->setData(initModel->index(i,4),go_iter.value().yuyuetime);
+
+
+			initModel->setData(initModel->index(i,5),go_iter.value().senddt);
+		}
+}
+
+#if 0
+	char service[128];
+	char siptel[32];
+	char yuyuedate[128];
+	char yuyuetime[64];
+	char senddt[64];
+#endif
+
+
+// 改变当前项目
+void lujiazui::changeCurrent(const QModelIndex &current,const QModelIndex &previous)
+{
+	int currentRow=previous.row();
+	QString index=ui.tableView->model()->index(current.row(),0).data().toString();
+	if(!index.isEmpty())
+	{
+		QMap<QString,DoctoryInfo>::const_iterator go_iter;
+		go_iter=map_docinfo.find(index);
+	    //qDebug()<<"-----------------------------------------"<<go_iter.value().siptel;
+		ui.lineEditTest->setText(go_iter.value().siptel);
+		ui.h_id_label->setText(go_iter.value().id);
+	}
+
+	ui.serviceCsBtn->setEnabled(false);
+
+#if 0
+
+
+	//int enterNum=0;
+	//enterNum++;
+	
+    currentRow=previous.row();
+
+	QString index=ui.tableView->model()->index(current.row(),0).data().toString();
+	if(!index.isEmpty())
+	{
+		QMap<QString,GuestOrder>::const_iterator go_iter;
+		go_iter=m_guestmap.find(index);
+		
+		QStringList  goodsList;
+		for(int i=0;i<go_iter.value().totalPD;i++)
+		{
+			char strlink[512];
+			strcpy(strlink,"商品编号：");
+			strcat(strlink,go_iter.value().guestGoods[i].homeBuyId);
+			strcat(strlink,"       货物名称：");
+			strcat(strlink,go_iter.value().guestGoods[i].product);
+			strcat(strlink,"       份 数：");
+			strcat(strlink,go_iter.value().guestGoods[i].quantity);
+			strcat(strlink,"       单 价：");
+			strcat(strlink,go_iter.value().guestGoods[i].unit);
+			goodsList<<strlink;
+		}
+			
+		listModel->setStringList(goodsList);
+		ui.listView->setModel(listModel);
+
+		ui.lineEdit_7->setText(go_iter.value().orderNum);
+		ui.lineEdit_2->setText(go_iter.value().buyer);
+		ui.lineEdit->setText(go_iter.value().bizDispatch);
+		ui.lineEdit_3->setText(go_iter.value().bizPay);
+		ui.lineEdit_8->setText(go_iter.value().SIPnum);
+
+		//暂时保留，与配送员关联时会用到
+		tmpOrderId=go_iter.value().orderId;
+	}
+#endif	
+}
+
+
+QString lujiazui::getMd5Check( QString md5key )
+{
+    /**********加密开始***********/  
+	QString md5Value;
+    QByteArray bb;  
+    bb = QCryptographicHash::hash(md5key.toAscii(),QCryptographicHash::Md5);  
+    md5Value.append(bb.toHex());  
+    /***********加密结束****************/  
+	
+
+    //QMessageBox::warning(this,"warning",md5Value.toUpper(),QMessageBox::Yes);  
+
+    return  md5Value.toUpper();
+}

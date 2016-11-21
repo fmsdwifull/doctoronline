@@ -1,0 +1,30 @@
+#include "logindlg.h"
+#include "common.h"
+
+LoginInfo  lginfo; //用户信息
+
+loginDlg::loginDlg(QDialog *parent)
+	: QDialog(parent)
+{
+	ui.setupUi(this);
+	//setWindowFlags(Qt::FramelessWindowHint);  
+	connect(ui.cancelBtn,SIGNAL(clicked()),this,SLOT(close()));
+}
+
+loginDlg::~loginDlg()
+{
+
+}
+
+void loginDlg::on_loginBtn_clicked()
+{
+	if(ui.pwdLineEdit->text()==tr("123456"))
+	{
+		strcpy(lginfo.username,ui.usrLineEdit->text().toStdString().c_str());
+		accept();
+	}
+	else{
+		QMessageBox::warning(this,tr("Warning"),tr("user name or password error!"),QMessageBox::Yes);
+	}
+
+}

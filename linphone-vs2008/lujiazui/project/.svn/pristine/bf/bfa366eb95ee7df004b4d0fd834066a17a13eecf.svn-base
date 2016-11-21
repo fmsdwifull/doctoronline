@@ -1,0 +1,174 @@
+[video]
+enabled=1
+size=cif
+display=1
+capture=1
+show_local=1
+self_view=1
+device=Directshow capture: USB2.0 Camera
+
+[call_log_0]
+dir=0
+status=1
+from=<sip:005@192.168.0.100>
+caller=005
+called=021200120011
+to=<sip:021200120011@192.168.0.100>
+start_date=2015-08-03 15:01:50
+duration=0
+record_file=
+
+[call_log_1]
+dir=0
+status=1
+from=<sip:005@192.168.0.100>
+caller=005
+called=021200120011
+to=<sip:021200120011@192.168.0.100>
+start_date=2015-08-03 15:01:08
+duration=0
+record_file=
+
+[call_log_2]
+dir=0
+status=1
+from=<sip:005@192.168.0.100>
+caller=005
+called=021200120011
+to=<sip:021200120011@192.168.0.100>
+start_date=2015-08-03 14:04:45
+duration=0
+record_file=
+
+[call_log_3]
+dir=0
+status=1
+from=<sip:005@192.168.0.100>
+caller=005
+called=021200120011
+to=<sip:021200120011@192.168.0.100>
+start_date=2015-08-03 11:13:43
+duration=0
+record_file=
+
+[call_log_4]
+dir=0
+status=0
+from=<sip:005@192.168.0.100>
+caller=005
+called=002
+to=<sip:002@192.168.0.100>
+start_date=2015-07-30 15:05:50
+duration=517
+record_file=
+
+[call_log_5]
+dir=0
+status=0
+from=<sip:005@192.168.0.100>
+caller=005
+called=002
+to=<sip:002@192.168.0.100>
+start_date=2015-07-30 13:55:42
+duration=29
+record_file=
+
+[call_log_6]
+dir=0
+status=1
+from=<sip:005@101.227.255.197:33233>
+caller=005
+called=02100008009
+to=<sip:02100008009@101.227.255.197:33233>
+start_date=2015-07-29 10:46:32
+duration=0
+record_file=
+
+[call_log_7]
+dir=0
+status=1
+from=<sip:005@101.227.255.197:33233>
+caller=005
+called=021000008009
+to=<sip:021000008009@101.227.255.197:33233>
+start_date=2015-07-29 10:46:21
+duration=0
+record_file=
+
+[call_log_8]
+dir=0
+status=0
+from=<sip:005@101.227.255.197:33233>
+caller=005
+called=001
+to=<sip:001@101.227.255.197:33233>
+start_date=2015-07-29 10:44:08
+duration=15
+record_file=
+
+[call_log_9]
+dir=0
+status=1
+from=<sip:005@101.227.255.197:33233>
+caller=005
+called=.001
+to=<sip:.001@101.227.255.197:33233>
+start_date=2015-07-29 10:43:32
+duration=0
+record_file=
+
+[call_log_10]
+dir=0
+status=1
+from=<sip:005@101.227.255.197:33233>
+caller=005
+called=.001
+to=<sip:.001@101.227.255.197:33233>
+start_date=2015-07-29 10:43:16
+duration=0
+record_file=
+
+[call_log_11]
+dir=0
+status=0
+from=<sip:005@101.227.255.197:33233>
+caller=005
+called=8888
+to=<sip:8888@101.227.255.197:33233>
+start_date=2015-07-29 10:42:17
+duration=55
+record_file=
+
+[call_log_12]
+dir=0
+status=0
+from=<sip:005@101.227.255.197:33233>
+caller=005
+called=8888
+to=<sip:8888@101.227.255.197:33233>
+start_date=2015-07-29 10:41:21
+duration=14
+record_file=
+
+[call_log_13]
+dir=0
+status=0
+from=<sip:005@101.227.255.197:33233>
+caller=005
+called=8888
+to=<sip:8888@101.227.255.197:33233>
+start_date=2015-07-29 10:38:37
+duration=8
+record_file=
+
+[call_log_14]
+dir=0
+status=0
+from=<sip:005@101.227.255.197:33233>
+caller=005
+called=9999
+to=<sip:9999@101.227.255.197:33233>
+start_date=2015-07-29 10:38:24
+duration=4
+record_file=
+

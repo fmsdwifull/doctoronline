@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/lujiazui">
+        <file>image/logox.ico</file>
+        <file>image/update.gif</file>
+        <file>image/hungup.gif</file>
+        <file>image/call.gif</file>
+        <file>image/login/toubu.png</file>
+    </qresource>
+</RCC>
